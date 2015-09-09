@@ -20,6 +20,7 @@ public class CoolWeatherDB {
     public static final int VERSION = 1;
     private static CoolWeatherDB coolWeatherDB;
     private SQLiteDatabase db;
+    private List<District> districts  = new ArrayList<>();
 
     /*构造方法私有化*/
     private CoolWeatherDB(Context context) {
@@ -27,6 +28,20 @@ public class CoolWeatherDB {
         db = dbHelper.getWritableDatabase();
     }
 
+    public void SqlInit(){
+        /*ContentValues values = new ContentValues();
+        values.put("province_name", "浙江");
+        db.insert("Province", null, values);
+        values.clear();
+        values.put("city_name", "宁波");
+        values.put("province_id", "1");
+        db.insert("City", null, values);
+        values.clear();
+        values.put("county_name", "鄞州区");
+        values.put("county_code", "101210411");
+        values.put("city_id", "1");
+        db.insert("County", null ,values);*/
+    }
     /*获取CoolWeatherDB实例*/
     public synchronized static CoolWeatherDB getInstance(Context context) {
         if (coolWeatherDB == null) {
@@ -40,7 +55,6 @@ public class CoolWeatherDB {
         if (province != null) {
             ContentValues values = new ContentValues();
             values.put("province_name", province.getProvinceName());
-            values.put("province_code", province.getProvinceCode());
             db.insert("Province", null, values);
         }
     }
@@ -54,7 +68,6 @@ public class CoolWeatherDB {
                 Province province = new Province();
                 province.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 province.setProvinceName(cursor.getString(cursor.getColumnIndex("province_name")));
-                province.setProvinceCode(cursor.getString(cursor.getColumnIndex("province_code")));
                 list.add(province);
             } while (cursor.moveToNext());
         }
@@ -66,26 +79,32 @@ public class CoolWeatherDB {
         if (city != null) {
             ContentValues values = new ContentValues();
             values.put("city_name", city.getCityName());
-            values.put("city_code", city.getCityCode());
             values.put("province_id", city.getProvinceId());
             db.insert("City", null, values);
         }
     }
-
+    private void GetCity(List<City> list, Cursor cursor){
+        if(cursor.moveToFirst()){
+            do{
+                City city = new City();
+                city.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
+                city.setProvinceId(cursor.getInt(cursor.getColumnIndex("province_id")));
+                list.add(city);
+            } while (cursor.moveToNext());
+        }
+    }
     /*从数据库中读取对应省份的城市*/
     public List<City> loadCity(int provinceId) {
         List<City> list = new ArrayList<City>();
         Cursor cursor = db.query("City", null, "province_id = ?", new String[]{String.valueOf(provinceId)}, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                City city = new City();
-                city.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
-                city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
-                city.setProvinceId(provinceId);
-                list.add(city);
-            } while (cursor.moveToNext());
-        }
+        GetCity(list, cursor);
+        return list;
+    }
+    public List<City> loadAllCity(){
+        List<City> list = new ArrayList<City>();
+        Cursor cursor = db.query("City", null, null , null, null, null, null);
+        GetCity(list ,cursor);
         return list;
     }
 
@@ -94,7 +113,6 @@ public class CoolWeatherDB {
         if (county != null) {
             ContentValues values = new ContentValues();
             values.put("county_name", county.getCountyName());
-            values.put("county_code", county.getCountyCode());
             values.put("city_id", county.getCityId());
             db.insert("County", null, values);
         }
