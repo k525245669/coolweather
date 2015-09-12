@@ -28,20 +28,6 @@ public class CoolWeatherDB {
         db = dbHelper.getWritableDatabase();
     }
 
-    public void SqlInit(){
-        /*ContentValues values = new ContentValues();
-        values.put("province_name", "浙江");
-        db.insert("Province", null, values);
-        values.clear();
-        values.put("city_name", "宁波");
-        values.put("province_id", "1");
-        db.insert("City", null, values);
-        values.clear();
-        values.put("county_name", "鄞州区");
-        values.put("county_code", "101210411");
-        values.put("city_id", "1");
-        db.insert("County", null ,values);*/
-    }
     /*获取CoolWeatherDB实例*/
     public synchronized static CoolWeatherDB getInstance(Context context) {
         if (coolWeatherDB == null) {
@@ -113,6 +99,7 @@ public class CoolWeatherDB {
         if (county != null) {
             ContentValues values = new ContentValues();
             values.put("county_name", county.getCountyName());
+            values.put("county_code", county.getCountyCode());
             values.put("city_id", county.getCityId());
             db.insert("County", null, values);
         }
@@ -132,7 +119,5 @@ public class CoolWeatherDB {
                 list.add(county);
             }while(cursor.moveToNext());
         }
-        return list;
-
-    }
+        return list;}
 }

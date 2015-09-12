@@ -1,6 +1,9 @@
 package com.zhukun.coolweather.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -10,7 +13,13 @@ import com.zhukun.coolweather.model.County;
 import com.zhukun.coolweather.model.District;
 import com.zhukun.coolweather.model.Province;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Administrator on 2015/9/8.
@@ -65,7 +74,7 @@ public class Utility {
         }
         return false;
     }
-
+    
     public static boolean handleCounty(CoolWeatherDB db, String response) {
         if (!TextUtils.isEmpty(response)) {
             Gson gson = new Gson();
@@ -90,6 +99,41 @@ public class Utility {
 
         }
         return true;
+    }
+    public static void handleWeather(Context context, String response){
+        try{
+            JSONObject jsonObject = new JSONObject(response);
+            JSONObject basicInfo =  jsonObject.getJSONObject("f");
+            String publishTime = basicInfo.getString("f0");
+            JSONArray weatherArray = basicInfo.getJSONArray("f1");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日",Locale.CHINA);
+
+            for(int i=0; i<weatherArray.length(); i++){
+                JSONObject weatherObject = weatherArray.getJSONObject(i);
+                String type1 = weatherObject.getString("fa");
+                String type2 = weatherObject.getString("fb");
+                String tmp1 = weatherObject.getString("fc");
+                String tmp2 = weatherObject.getString("fd");
+                switch (i){
+                    case 0:
+                        SharedPreferences.Editor editor = context.getSharedPreferences("data" + i, 0).edit();
+                        editor.putString("type1", type1);
+                        editor.putString("type2", type2);
+                        editor.putString("tmp1", tmp1);
+                        editor.putString("tmp2", tmp2);
+                        editor.putString("publishTime", publishTime);
+                        editor.putString("currentTime", sdf.format(new Date()));
+                        editor.commit();
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                       break;
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
 

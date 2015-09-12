@@ -2,6 +2,7 @@ package com.zhukun.coolweather.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -50,7 +51,6 @@ public class ChooseAreaActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.choose_are);
         db = CoolWeatherDB.getInstance(this);
-       // db.SqlInit();
         titleText = (TextView) findViewById(R.id.title_text);
         listView = (ListView) findViewById(R.id.list_view);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dataList);
@@ -66,6 +66,16 @@ public class ChooseAreaActivity extends Activity {
                     queryCounties();
                 } else if (currentLevel == COUNTY_LEVEL){
                     //跳转到具体的天气页面；
+                    String countyName = countyList.get(i).getCountyName();
+                    String areId = countyList.get(i).getCountyCode();
+                    int countyId = countyList.get(i).getId();
+                    Log.d("ChooseArea","areId:" + areId);
+                    Log.d("ChooseArea","countyId:" + countyId);
+                    Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
+                    intent.putExtra("areId", areId);
+                    intent.putExtra("countyId", countyId);
+                    intent.putExtra("countyName", countyName);
+                    startActivity(intent);
                 }
             }
         });
