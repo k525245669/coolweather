@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,6 +26,7 @@ import java.util.Locale;
  * Created by Administrator on 2015/9/8.
  */
 public class Utility {
+
     public synchronized static boolean handleProvince(CoolWeatherDB db, String response) {
         if (!TextUtils.isEmpty(response)) {
             Gson gson = new Gson();
@@ -74,7 +76,7 @@ public class Utility {
         }
         return false;
     }
-    
+
     public static boolean handleCounty(CoolWeatherDB db, String response) {
         if (!TextUtils.isEmpty(response)) {
             Gson gson = new Gson();
@@ -134,6 +136,26 @@ public class Utility {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public static String matchWeather(String weatherId){
+        HashMap weatherMap = weatherMapInit();
+        return (String) weatherMap.get(weatherId);
+    }
+
+    private static HashMap weatherMapInit() {
+        HashMap weatherMap = new HashMap();
+        weatherMap.put("00","晴");
+        weatherMap.put("01","多云");
+        weatherMap.put("02","阴");
+        weatherMap.put("03","阵雨");
+        weatherMap.put("04","雷阵雨");
+        weatherMap.put("05","雷阵雨伴有冰雹");
+        weatherMap.put("06","雨夹雪");
+        weatherMap.put("07","小雨");
+        weatherMap.put("08","中雨");
+        weatherMap.put("09","大雨");
+        return weatherMap;
     }
 }
 

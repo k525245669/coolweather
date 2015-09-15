@@ -37,6 +37,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     private TextView tmp1Text;
     private TextView tmp2Text;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +59,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         CityText.setText(countyName);
         if(!TextUtils.isEmpty(areaId)){
             publishText.setText("同步中..");
+            Log.d("Weather",getHourAndMinute("201509152055"));
             infoLayout.setVisibility(View.INVISIBLE);
             CityText.setVisibility(View.INVISIBLE);
             queryWeatherFromServer(areaId, TODAY);
@@ -67,6 +69,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 
     private void queryWeatherFromServer(String areaId, final int dayId) {
         String address = getAddress(areaId);
+        Log.d("address",address);
         HttpUtil.sendHttpRequest(address, new HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
@@ -81,12 +84,12 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 
             @Override
             public void onError(Exception e) {
-               runOnUiThread(new Runnable() {
-                   @Override
-                   public void run() {
-                       publishText.setText("同步失败");
-                   }
-               });
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        publishText.setText("同步失败");
+                    }
+                });
             }
         });
 
@@ -104,13 +107,18 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
             midTempText.setText("~");
         }
         tmp2Text.setText(pref.getString("tmp2", "0") + "oC");
-       /* SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        String publishTime = sdf.format(pref.getString("publishTime", ""));
-       */
-        publishText.setText("今天" + pref.getString("publishTime", "") + "发布");
-        currentText.setText(pref.getString("currentTime",""));
+        String publishTime = getHourAndMinute(pref.getString("publishTime", ""));
+        publishText.setText("今天" + publishTime + "发布");
+        currentText.setText(pref.getString("currentTime","")+"天气:");
+        weatherType.setText(Utility.matchWeather(pref.getString("type2","")));
         infoLayout.setVisibility(View.VISIBLE);
         CityText.setVisibility(View.VISIBLE);
+    }
+
+    private String getHourAndMinute(String publishTime) {
+        String tmp1 = publishTime.substring(8,10);
+        String tmp2 = publishTime.substring(10,12);
+        return tmp1 +":"+tmp2;
     }
 
 

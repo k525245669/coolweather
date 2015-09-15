@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.zhukun.coolweather.db.CoolWeatherOpenHelper;
+import com.zhukun.coolweather.db.RestoreData;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.zhukun.coolweather.R;
+import com.zhukun.coolweather.db.RestoreData;
 import com.zhukun.coolweather.model.City;
 import com.zhukun.coolweather.model.CoolWeatherDB;
 import com.zhukun.coolweather.model.County;
@@ -21,6 +22,7 @@ import com.zhukun.coolweather.util.HttpCallBackListener;
 import com.zhukun.coolweather.util.HttpUtil;
 import com.zhukun.coolweather.util.Utility;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +51,12 @@ public class ChooseAreaActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        RestoreData restoreData = new RestoreData();
+        try {
+            restoreData.createDatabase(ChooseAreaActivity.this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         setContentView(R.layout.choose_are);
         db = CoolWeatherDB.getInstance(this);
         titleText = (TextView) findViewById(R.id.title_text);
