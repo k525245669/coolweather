@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,7 +22,6 @@ import com.zhukun.coolweather.util.KeyGenerate;
 import com.zhukun.coolweather.util.Utility;
 
 import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +48,9 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     private View view2;
     private View view3;
     private String countyName;
+    private ImageView imageView;
+    private ImageView[] imageArry;
+    private ViewGroup dotlist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,12 +60,31 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         TimeZone.setDefault(time);
         CityText = (TextView) findViewById(R.id.City_name);
         pager = (ViewPager) findViewById(R.id.viewpager);
+        dotlist = (ViewGroup) findViewById(R.id.dotlist);
         view1 = LayoutInflater.from(this).inflate(R.layout.weather_layout, null);
         view2 = LayoutInflater.from(this).inflate(R.layout.weather_layout, null);
         view3 = LayoutInflater.from(this).inflate(R.layout.weather_layout, null);
         viewContainer.add(view1);
         viewContainer.add(view2);
         viewContainer.add(view3);
+        imageArry = new ImageView[viewContainer.size()];
+        //生成每个点
+        for(int i=0;i<viewContainer.size();i++){
+            imageView = new ImageView(WeatherActivity.this);
+            imageView.setLayoutParams(new LinearLayout.LayoutParams(30, 30));
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
+            ));
+            lp.leftMargin = 10;
+            lp.rightMargin = 10;
+            imageArry[i] = imageView;
+            if(i==0){
+                imageView.setBackgroundResource(R.drawable.page_indicator_focused);
+            }else{
+                imageView.setBackgroundResource(R.drawable.page_indicator_unfocused);
+            }
+            dotlist.addView(imageView,lp);
+        }
 
         pager.setAdapter(new PagerAdapter() {
             @Override
@@ -103,14 +125,17 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
                     case 0:
                         bindViews(view1);
                         showWeather(TODAY);
+                        reFreshdot(i);
                         break;
                     case 1:
                         bindViews(view2);
                         showWeather(TOMORROW);
+                        reFreshdot(i);
                         break;
                     case 2:
                         bindViews(view3);
                         showWeather(DAY_AFTER_TOMORROW);
+                        reFreshdot(i);
                         break;
                 }
 
@@ -133,6 +158,16 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
             queryWeatherFromServer(areaId, TODAY);
         }
 
+    }
+
+    private void reFreshdot(int i) {
+        for(int j=0;j<imageArry.length;j++){
+            if(j==i){
+                imageArry[j].setBackgroundResource(R.drawable.page_indicator_focused);
+            }else{
+                imageArry[j].setBackgroundResource(R.drawable.page_indicator_unfocused);
+            }
+        }
     }
 
     private void bindViews(View view1) {
