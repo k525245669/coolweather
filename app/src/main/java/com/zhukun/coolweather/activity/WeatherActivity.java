@@ -1,6 +1,7 @@
 package com.zhukun.coolweather.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,6 +36,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     public static final int TODAY = 0;
     public static final int TOMORROW = 1;
     public static final int DAY_AFTER_TOMORROW = 2;
+    private int dayNow;
     private TextView CityText;
     private TextView publishText;
     private TextView currentText;
@@ -51,6 +54,9 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     private ImageView imageView;
     private ImageView[] imageArry;
     private ViewGroup dotlist;
+    private Button switchButton;
+    private Button refreshButton;
+    private String areaId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,16 +131,19 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
                     case 0:
                         bindViews(view1);
                         showWeather(TODAY);
+                        dayNow = TODAY;
                         reFreshdot(i);
                         break;
                     case 1:
                         bindViews(view2);
                         showWeather(TOMORROW);
+                        dayNow = TOMORROW;
                         reFreshdot(i);
                         break;
                     case 2:
                         bindViews(view3);
                         showWeather(DAY_AFTER_TOMORROW);
+                        dayNow = DAY_AFTER_TOMORROW;
                         reFreshdot(i);
                         break;
                 }
@@ -148,15 +157,49 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         });
         bindViews(view1);
         String countyName = getIntent().getStringExtra("countyName");
-        String areaId = getIntent().getStringExtra("areId");
+        areaId = getIntent().getStringExtra("areId");
         int countyId = getIntent().getIntExtra("countyId", 0);
+        SharedPreferences.Editor editor = getSharedPreferences("CityInfo", 0).edit();
+        editor.putString("areId", areaId);
+        editor.putInt("countyId", countyId);
+        editor.putString("countyName", countyName);
+        editor.putBoolean("city_selected", true);
+        editor.commit();
+
         if(!TextUtils.isEmpty(areaId)){
             publishText.setText("同步中..");
             infoLayout.setVisibility(View.INVISIBLE);
             CityText.setVisibility(View.INVISIBLE);
             CityText.setText(countyName);
             queryWeatherFromServer(areaId, TODAY);
+            dayNow = TODAY;
         }
+        switchButton = (Button) findViewById(R.id.switch_city);
+        refreshButton = (Button) findViewById(R.id.refresh);
+        switchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WeatherActivity.this, ChooseAreaActivity.class);
+                intent.putExtra("from_weather_activity", true);
+                startActivity(intent);
+                finish();
+            }
+        });
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                publishText.setText("同步中..");
+                switch (dayNow){
+                    case 0:queryWeatherFromServer(areaId, TODAY);
+                            break;
+                    case 1:queryWeatherFromServer(areaId, TOMORROW);
+                            break;
+                    case 2:queryWeatherFromServer(areaId, DAY_AFTER_TOMORROW);
+                            break;
+                }
+
+            }
+        });
 
     }
 

@@ -117,6 +117,7 @@ public class Utility {
                 String tmp1 = weatherObject.getString("fc");
                 String tmp2 = weatherObject.getString("fd");
                 SharedPreferences.Editor editor = context.getSharedPreferences("data" + i, 0).edit();
+                editor.putBoolean("city_selected", true);
                 editor.putString("type1", type1);
                 editor.putString("type2", type2);
                 editor.putString("tmp1", tmp1);

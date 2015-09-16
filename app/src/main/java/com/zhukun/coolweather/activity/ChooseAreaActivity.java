@@ -3,6 +3,7 @@ package com.zhukun.coolweather.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -47,9 +48,21 @@ public class ChooseAreaActivity extends Activity {
     private List<County> countyList;
     private CoolWeatherDB db;
     private ProgressDialog progressDialog;
+    private boolean isFromWeatherActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences pref = getSharedPreferences("CityInfo" , 0);
+        isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity", false);
+        if(pref.getBoolean("city_selected",false) && !isFromWeatherActivity){
+            Intent intent = new Intent(this, WeatherActivity.class);
+            intent.putExtra("areId", pref.getString("areId", ""));
+            intent.putExtra("countyId", pref.getInt("countyId", 0));
+            intent.putExtra("countyName", pref.getString("countyName", ""));
+            startActivity(intent);
+            finish();
+            return;
+        }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         RestoreData restoreData = new RestoreData();
         try {
@@ -58,6 +71,8 @@ public class ChooseAreaActivity extends Activity {
             e.printStackTrace();
         }
         setContentView(R.layout.choose_are);
+
+
         db = CoolWeatherDB.getInstance(this);
         titleText = (TextView) findViewById(R.id.title_text);
         listView = (ListView) findViewById(R.id.list_view);
@@ -78,12 +93,13 @@ public class ChooseAreaActivity extends Activity {
                     String areId = countyList.get(i).getCountyCode();
                     int countyId = countyList.get(i).getId();
                     Log.d("ChooseArea","areId:" + areId);
-                    Log.d("ChooseArea","countyId:" + countyId);
+                    Log.d("ChooseArea", "countyId:" + countyId);
                     Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
                     intent.putExtra("areId", areId);
                     intent.putExtra("countyId", countyId);
                     intent.putExtra("countyName", countyName);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -201,7 +217,16 @@ public class ChooseAreaActivity extends Activity {
             queryProvince();
         }
         else {
+            if(isFromWeatherActivity){
+                SharedPreferences pref = getSharedPreferences("CityInfo" , 0);
+                Intent intent = new Intent(this, WeatherActivity.class);
+                intent.putExtra("areId", pref.getString("areId", ""));
+                intent.putExtra("countyId", pref.getInt("countyId", 0));
+                intent.putExtra("countyName", pref.getString("countyName", ""));
+                startActivity(intent);
+            }
             super.onBackPressed();
         }
+
     }
 }
