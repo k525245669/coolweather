@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zhukun.coolweather.R;
+import com.zhukun.coolweather.service.AutoUpdateService;
 import com.zhukun.coolweather.util.HttpCallBackListener;
 import com.zhukun.coolweather.util.HttpUtil;
 import com.zhukun.coolweather.util.KeyGenerate;
@@ -267,9 +268,11 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         String publishTime = getHourAndMinute(pref.getString("publishTime", ""));
         publishText.setText("今天" + publishTime + "发布");
         currentText.setText(pref.getString("currentTime","")+ ":");
-        weatherType.setText(Utility.matchWeather(pref.getString("type2","")));
+        weatherType.setText(Utility.matchWeather(pref.getString("type2", "")));
         infoLayout.setVisibility(View.VISIBLE);
         CityText.setVisibility(View.VISIBLE);
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
 
     private String getHourAndMinute(String publishTime) {
