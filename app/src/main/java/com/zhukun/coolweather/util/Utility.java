@@ -116,22 +116,14 @@ public class Utility {
                 String type2 = weatherObject.getString("fb");
                 String tmp1 = weatherObject.getString("fc");
                 String tmp2 = weatherObject.getString("fd");
-                switch (i){
-                    case 0:
-                        SharedPreferences.Editor editor = context.getSharedPreferences("data" + i, 0).edit();
-                        editor.putString("type1", type1);
-                        editor.putString("type2", type2);
-                        editor.putString("tmp1", tmp1);
-                        editor.putString("tmp2", tmp2);
-                        editor.putString("publishTime", publishTime);
-                        editor.putString("currentTime", sdf.format(new Date()));
-                        editor.commit();
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                       break;
-                }
+                SharedPreferences.Editor editor = context.getSharedPreferences("data" + i, 0).edit();
+                editor.putString("type1", type1);
+                editor.putString("type2", type2);
+                editor.putString("tmp1", tmp1);
+                editor.putString("tmp2", tmp2);
+                editor.putString("publishTime", publishTime);
+                editor.putString("currentTime", sdf.format(new Date().getTime()+i*24*60*60*1000));
+                editor.commit();
             }
         } catch (Exception e){
             e.printStackTrace();
