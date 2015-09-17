@@ -7,6 +7,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.zhukun.coolweather.R;
+import com.zhukun.coolweather.activity.WeatherActivity;
 import com.zhukun.coolweather.model.City;
 import com.zhukun.coolweather.model.CoolWeatherDB;
 import com.zhukun.coolweather.model.County;
@@ -148,7 +150,62 @@ public class Utility {
         weatherMap.put("07","小雨");
         weatherMap.put("08","中雨");
         weatherMap.put("09","大雨");
+        weatherMap.put("10","暴雨");
         return weatherMap;
+    }
+    public static int getImageId(String type, int day) {
+        if(day == WeatherActivity.DAY){
+            switch(type){
+                case "00":
+                    return R.drawable.day00;
+                case "01":
+                    return R.drawable.day01;
+                case "02":
+                    return R.drawable.day02;
+                case "03":
+                    return R.drawable.day03;
+                case "04":
+                    return R.drawable.day04;
+                case "05":
+                    return R.drawable.day05;
+                case "06":
+                    return R.drawable.day06;
+                case "07":
+                    return R.drawable.day07;
+                case "08":
+                    return R.drawable.day08;
+                case "09":
+                    return R.drawable.day09;
+                case "10":
+                    return R.drawable.day10;
+            }
+
+        }
+        else if(day == WeatherActivity.NIGHT){
+            switch (type){
+                case "00":
+                    return R.drawable.night00;
+                case "01":
+                    return R.drawable.night01;
+                case "02":
+                    return R.drawable.night02;
+                case "03":
+                    return R.drawable.night03;
+                case "04":
+                    return R.drawable.night04;
+                case "05":
+                    return R.drawable.night05;
+                case "06":
+                    return R.drawable.night06;
+                case "07":
+                    return R.drawable.night07;
+                case "08":
+                    return R.drawable.night08;
+                case "09":
+                    return R.drawable.night09;
+            }
+        }
+        return 0;
     }
 }
 

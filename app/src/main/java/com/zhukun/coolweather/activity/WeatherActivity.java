@@ -37,6 +37,8 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     public static final int TODAY = 0;
     public static final int TOMORROW = 1;
     public static final int DAY_AFTER_TOMORROW = 2;
+    public static final int DAY = 3;
+    public static final int NIGHT = 4;
     private int dayNow;
     private TextView CityText;
     private TextView publishText;
@@ -57,6 +59,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     private ViewGroup dotlist;
     private Button switchButton;
     private Button refreshButton;
+    private ImageView weatherImage;
     private String areaId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,6 +225,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         tmp1Text = (TextView) view1.findViewById(R.id.temp1);
         tmp2Text = (TextView) view1.findViewById(R.id.temp2);
         midTempText = (TextView) view1.findViewById(R.id.midTempText);
+        weatherImage = (ImageView) view1.findViewById(R.id.weather_image);
     }
 
 
@@ -258,15 +262,19 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         SharedPreferences.Editor editor =getSharedPreferences(areaId, 0).edit();
         String tmp1 = pref.getString("tmp1", "0");
         String tmp2 = pref.getString("tmp2", "0");
+        String type1 = pref.getString("type1","");
+        String type2 = pref.getString("type2","");
         if(tmp1.equals("")){
             tmp1Text.setText("夜间");
             midTempText.setText("温度:");
-            weatherType.setText(Utility.matchWeather(pref.getString("type2","")));
+            weatherType.setText(Utility.matchWeather(type2));
+            weatherImage.setImageResource(Utility.getImageId(type2, NIGHT));
         }
         else {
             tmp1Text.setText(tmp1 + "℃");
             midTempText.setText("~");
-            weatherType.setText(Utility.matchWeather(pref.getString("type1","")));
+            weatherType.setText(Utility.matchWeather(type1));
+            weatherImage.setImageResource(Utility.getImageId(type1, DAY));
         }
         tmp2Text.setText(tmp2 + "℃");
         String publishTime = getHourAndMinute(pref.getString("publishTime", ""));
