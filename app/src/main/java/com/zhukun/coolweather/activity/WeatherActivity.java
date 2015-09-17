@@ -261,10 +261,10 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
             midTempText.setText("温度:");
         }
         else {
-            tmp1Text.setText(tmp1 + "oC");
+            tmp1Text.setText(tmp1 + "℃");
             midTempText.setText("~");
         }
-        tmp2Text.setText(pref.getString("tmp2", "0") + "oC");
+        tmp2Text.setText(pref.getString("tmp2", "0") + "℃");
         String publishTime = getHourAndMinute(pref.getString("publishTime", ""));
         publishText.setText("今天" + publishTime + "发布");
         currentText.setText(pref.getString("currentTime","")+ ":");

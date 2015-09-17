@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#27A5F9">
+    <TextView
+        android:id="@+id/city_selected_show_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15pt"
+        android:text="16:80"/>
+    <TextView
+        android:id="@+id/city_selected_city_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15pt"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/city_selected_show_time"
+        android:text="鄞州"/>
+    <TextView
+        android:id="@+id/city_selected_tmp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"
+        android:textSize="30pt"
+        android:text="20℃"/>
+</RelativeLayout>

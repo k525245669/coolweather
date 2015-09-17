@@ -2,6 +2,7 @@ package com.zhukun.coolweather.model;
 
 /**
  * Created by Administrator on 2015/9/8.
+ * 用于城市数据的JSON解析
  */
 public class District {
     private String areaid;
