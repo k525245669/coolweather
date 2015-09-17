@@ -186,7 +186,6 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
                 Intent intent = new Intent(WeatherActivity.this, SelectedCityActivity.class);
                 //intent.putExtra("from_weather_activity", true);
                 startActivity(intent);
-                finish();
             }
         });
         refreshButton.setOnClickListener(new View.OnClickListener() {
