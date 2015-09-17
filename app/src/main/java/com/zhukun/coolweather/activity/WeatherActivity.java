@@ -180,8 +180,8 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         switchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(WeatherActivity.this, ChooseAreaActivity.class);
-                intent.putExtra("from_weather_activity", true);
+                Intent intent = new Intent(WeatherActivity.this, SelectedCityActivity.class);
+                //intent.putExtra("from_weather_activity", true);
                 startActivity(intent);
                 finish();
             }
@@ -225,7 +225,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     }
 
 
-    private void queryWeatherFromServer(String areaId, final int dayId) {
+    private void queryWeatherFromServer(final String areaId, final int dayId) {
         String address = getAddress(areaId);
         Log.d("address",address);
         HttpUtil.sendHttpRequest(address, new HttpCallBackListener() {
@@ -255,22 +255,35 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 
     private void showWeather(int dayId) {
         SharedPreferences pref = getSharedPreferences("data" + dayId, 0);
+        SharedPreferences.Editor editor =getSharedPreferences(areaId, 0).edit();
         String tmp1 = pref.getString("tmp1", "0");
+        String tmp2 = pref.getString("tmp2", "0");
         if(tmp1.equals("")){
             tmp1Text.setText("夜间");
             midTempText.setText("温度:");
+            weatherType.setText(Utility.matchWeather(pref.getString("type2","")));
         }
         else {
             tmp1Text.setText(tmp1 + "℃");
             midTempText.setText("~");
+            weatherType.setText(Utility.matchWeather(pref.getString("type1","")));
         }
-        tmp2Text.setText(pref.getString("tmp2", "0") + "℃");
+        tmp2Text.setText(tmp2 + "℃");
         String publishTime = getHourAndMinute(pref.getString("publishTime", ""));
         publishText.setText("今天" + publishTime + "发布");
         currentText.setText(pref.getString("currentTime","")+ ":");
-        weatherType.setText(Utility.matchWeather(pref.getString("type2", "")));
+
         infoLayout.setVisibility(View.VISIBLE);
         CityText.setVisibility(View.VISIBLE);
+        if(dayId == TODAY){
+            if(publishTime.equals("18:00")) {   //如果18：00发布，则保存晚上的温度
+                editor.putString("tmp", tmp2);
+            }else{
+                editor.putString("tmp", tmp1);
+            }
+            editor.putString("date", publishTime+"发布");
+            editor.commit();
+        }
         Intent intent = new Intent(this, AutoUpdateService.class);
         startService(intent);
     }

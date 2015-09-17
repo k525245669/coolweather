@@ -7,13 +7,13 @@
         android:id="@+id/city_selected_show_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15pt"
+        android:textSize="20sp"
         android:text="16:80"/>
     <TextView
         android:id="@+id/city_selected_city_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="15pt"
+        android:textSize="20sp"
         android:layout_marginTop="10dp"
         android:layout_below="@id/city_selected_show_time"
         android:text="鄞州"/>
@@ -24,6 +24,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="5dp"
         android:layout_alignParentRight="true"
-        android:textSize="30pt"
+        android:textSize="45sp"
         android:text="20℃"/>
 </RelativeLayout>

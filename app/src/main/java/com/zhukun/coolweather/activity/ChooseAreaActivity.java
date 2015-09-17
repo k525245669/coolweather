@@ -19,6 +19,7 @@ import com.zhukun.coolweather.model.City;
 import com.zhukun.coolweather.model.CoolWeatherDB;
 import com.zhukun.coolweather.model.County;
 import com.zhukun.coolweather.model.Province;
+import com.zhukun.coolweather.model.SelectedCountyCollecter;
 import com.zhukun.coolweather.util.HttpCallBackListener;
 import com.zhukun.coolweather.util.HttpUtil;
 import com.zhukun.coolweather.util.Utility;
@@ -48,13 +49,13 @@ public class ChooseAreaActivity extends Activity {
     private List<County> countyList;
     private CoolWeatherDB db;
     private ProgressDialog progressDialog;
-    private boolean isFromWeatherActivity;
+    private boolean isFromSelectedActivity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences pref = getSharedPreferences("CityInfo" , 0);
-        isFromWeatherActivity = getIntent().getBooleanExtra("from_weather_activity", false);
-        if(pref.getBoolean("city_selected",false) && !isFromWeatherActivity){
+        isFromSelectedActivity = getIntent().getBooleanExtra("from_selected_activity", false);
+        if(pref.getBoolean("city_selected",false) && !isFromSelectedActivity){
             Intent intent = new Intent(this, WeatherActivity.class);
             intent.putExtra("areId", pref.getString("areId", ""));
             intent.putExtra("countyId", pref.getInt("countyId", 0));
@@ -92,6 +93,7 @@ public class ChooseAreaActivity extends Activity {
                     String countyName = countyList.get(i).getCountyName();
                     String areId = countyList.get(i).getCountyCode();
                     int countyId = countyList.get(i).getId();
+                    SelectedCountyCollecter.addSelectedCounty(countyList.get(i)); //用于在已选城市页面显示。
                     Log.d("ChooseArea","areId:" + areId);
                     Log.d("ChooseArea", "countyId:" + countyId);
                     Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
@@ -217,12 +219,13 @@ public class ChooseAreaActivity extends Activity {
             queryProvince();
         }
         else {
-            if(isFromWeatherActivity){
-                SharedPreferences pref = getSharedPreferences("CityInfo" , 0);
+            if(isFromSelectedActivity){
+               /* SharedPreferences pref = getSharedPreferences("CityInfo" , 0);
                 Intent intent = new Intent(this, WeatherActivity.class);
                 intent.putExtra("areId", pref.getString("areId", ""));
                 intent.putExtra("countyId", pref.getInt("countyId", 0));
-                intent.putExtra("countyName", pref.getString("countyName", ""));
+                intent.putExtra("countyName", pref.getString("countyName", ""));*/
+                Intent intent = new Intent(this, SelectedCityActivity.class);
                 startActivity(intent);
             }
             super.onBackPressed();
