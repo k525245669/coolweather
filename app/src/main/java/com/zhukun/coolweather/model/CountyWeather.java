@@ -1,13 +1,42 @@
 package com.zhukun.coolweather.model;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Created by Administrator on 2015/9/17.
  */
-public class CountyWeather {
+public class CountyWeather extends DataSupport{
+    private int id;
     private String countyName;
+    private String areaId;
+    private int countyId;
     private String tmp;
     private String date;
     private int imageId;
+
+    public int getCountyId() {
+        return countyId;
+    }
+
+    public void setCountyId(int countyId) {
+        this.countyId = countyId;
+    }
+
+    public String getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(String areaId) {
+        this.areaId = areaId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getCountyName() {
         return countyName;

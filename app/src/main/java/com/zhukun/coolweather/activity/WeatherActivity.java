@@ -3,6 +3,7 @@ package com.zhukun.coolweather.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,11 +19,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zhukun.coolweather.R;
+import com.zhukun.coolweather.model.CountyWeather;
 import com.zhukun.coolweather.service.AutoUpdateService;
 import com.zhukun.coolweather.util.HttpCallBackListener;
 import com.zhukun.coolweather.util.HttpUtil;
 import com.zhukun.coolweather.util.KeyGenerate;
 import com.zhukun.coolweather.util.Utility;
+
+import org.litepal.crud.DataSupport;
+import org.litepal.tablemanager.Connector;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,11 +66,16 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
     private Button refreshButton;
     private ImageView weatherImage;
     private String areaId;
+    private  CountyWeather countyForSaved;
+    private SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.viewpager);
+        db = Connector.getDatabase();
+        countyForSaved = new CountyWeather();
         TimeZone time = TimeZone.getTimeZone("GMT+8");  //设置时区
         TimeZone.setDefault(time);
         CityText = (TextView) findViewById(R.id.City_name);
@@ -161,8 +171,11 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         });
         bindViews(view1);
         String countyName = getIntent().getStringExtra("countyName");
+        countyForSaved.setCountyName(countyName);
         areaId = getIntent().getStringExtra("areId");
+        countyForSaved.setAreaId(areaId);
         int countyId = getIntent().getIntExtra("countyId", 0);
+        countyForSaved.setCountyId(countyId);
         SharedPreferences.Editor editor = getSharedPreferences("CityInfo", 0).edit();
         editor.putString("areId", areaId);
         editor.putInt("countyId", countyId);
@@ -186,6 +199,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
                 Intent intent = new Intent(WeatherActivity.this, SelectedCityActivity.class);
                 //intent.putExtra("from_weather_activity", true);
                 startActivity(intent);
+                finish();
             }
         });
         refreshButton.setOnClickListener(new View.OnClickListener() {
@@ -230,7 +244,6 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 
     private void queryWeatherFromServer(final String areaId, final int dayId) {
         String address = getAddress(areaId);
-        Log.d("address",address);
         HttpUtil.sendHttpRequest(address, new HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
@@ -279,17 +292,30 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         String publishTime = getHourAndMinute(pref.getString("publishTime", ""));
         publishText.setText("今天" + publishTime + "发布");
         currentText.setText(pref.getString("currentTime","")+ ":");
-
         infoLayout.setVisibility(View.VISIBLE);
         CityText.setVisibility(View.VISIBLE);
         if(dayId == TODAY){
             if(publishTime.equals("18:00")) {   //如果18：00发布，则保存晚上的温度
                 editor.putString("tmp", tmp2);
+                countyForSaved.setTmp(tmp2 + "℃");
+
             }else{
                 editor.putString("tmp", tmp1);
+                countyForSaved.setTmp(tmp1 + "℃");
             }
-            editor.putString("date", publishTime+"发布");
+            editor.putString("date", publishTime + "发布");
+                countyForSaved.setDate(publishTime);
             editor.commit();
+            List<CountyWeather> countyWeathers=  DataSupport.where("countyName = ?", countyForSaved.getCountyName()).find(CountyWeather.class);
+            if(countyWeathers.size() == 0){
+                countyForSaved.save();
+            }else{
+                int id = countyWeathers.get(0).getId();
+                CountyWeather countyForUpdate = new CountyWeather();
+                countyForUpdate.setTmp(countyForSaved.getTmp());
+                countyForUpdate.setDate(countyForSaved.getDate());
+                countyForUpdate.update(id);
+            }
         }
         Intent intent = new Intent(this, AutoUpdateService.class);
         startService(intent);

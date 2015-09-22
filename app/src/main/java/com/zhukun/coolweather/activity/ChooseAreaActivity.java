@@ -94,8 +94,6 @@ public class ChooseAreaActivity extends Activity {
                     String areId = countyList.get(i).getCountyCode();
                     int countyId = countyList.get(i).getId();
                     SelectedCountyCollecter.addSelectedCounty(countyList.get(i)); //用于在已选城市页面显示。
-                    Log.d("ChooseArea","areId:" + areId);
-                    Log.d("ChooseArea", "countyId:" + countyId);
                     Intent intent = new Intent(ChooseAreaActivity.this, WeatherActivity.class);
                     intent.putExtra("areId", areId);
                     intent.putExtra("countyId", countyId);

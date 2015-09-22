@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -16,6 +17,8 @@ import com.zhukun.coolweather.model.CountyWeather;
 import com.zhukun.coolweather.model.SelectedCountyCollecter;
 import com.zhukun.coolweather.util.CountyAdapter;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +30,7 @@ public class SelectedCityActivity extends Activity {
     private ListView listView;
     private List<CountyWeather> countyWeathers = new ArrayList<>();
     private Button addButton;
+    private Button delelteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +38,8 @@ public class SelectedCityActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.city_selected_layout);
         listView = (ListView) findViewById(R.id.city_selected_list);
-        CountyWeatherInit();
+        countyWeathers = DataSupport.findAll(CountyWeather.class);
+        //CountyWeatherInit();
         adapter = new CountyAdapter(SelectedCityActivity.this, R.layout.city_selected_item, countyWeathers);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -43,14 +48,23 @@ public class SelectedCityActivity extends Activity {
                 //跳转到具体显示页面。
                 Intent intent = new Intent(SelectedCityActivity.this, WeatherActivity.class);
                 String selectedCountyName = countyWeathers.get(position).getCountyName();
-                for (County county : (ArrayList<County>) SelectedCountyCollecter.selectedCounties) {
+                for (CountyWeather county : countyWeathers) {
+                    if (county.getCountyName().equals(selectedCountyName)) {
+                        intent.putExtra("areId", county.getAreaId());
+                        intent.putExtra("countyId", county.getCountyId());
+                        intent.putExtra("countyName", county.getCountyName());
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+              /*  for (County county : (ArrayList<County>) SelectedCountyCollecter.selectedCounties) {
                     if (county.getCountyName().equals(selectedCountyName)) {
                         intent.putExtra("areId", county.getCountyCode());
                         intent.putExtra("countyId", county.getId());
                         intent.putExtra("countyName", county.getCountyName());
                         startActivity(intent);
                     }
-                }
+                }*/
                 //ListView 逻辑实现后，添加侧滑删除效果。
             }
         });
@@ -63,6 +77,19 @@ public class SelectedCityActivity extends Activity {
                 startActivity(intent);
             }
         });
+/*        delelteButton = (Button) findViewById(R.id.delete_all);
+        delelteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataSupport.deleteAll(CountyWeather.class);
+                countyWeathers = DataSupport.findAll(CountyWeather.class);
+                while(countyWeathers.size() != 0){
+                    countyWeathers.remove(0);
+                }
+                Log.d("Size", countyWeathers.size() + "");
+                adapter.notifyDataSetChanged();
+            }
+        });*/
 
     }
 

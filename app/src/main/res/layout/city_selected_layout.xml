@@ -14,5 +14,12 @@
         android:layout_alignParentRight="true"
         android:text="Add City"
         />
+    <!--<Button
+        android:id="@+id/delete_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/city_selected_list"
+        android:text="Delete All"
+        android:layout_alignParentLeft="true"/>-->
 
 </RelativeLayout>
