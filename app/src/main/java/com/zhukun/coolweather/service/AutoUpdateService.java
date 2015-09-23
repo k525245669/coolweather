@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.zhukun.coolweather.receiver.AutoUpdateReciver;
@@ -17,7 +16,7 @@ import com.zhukun.coolweather.receiver.AutoUpdateReciver;
  */
 public class AutoUpdateService extends Service {
 
-    @Nullable
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;

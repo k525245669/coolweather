@@ -1,0 +1,43 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <!-- linearlayout中的布局是每一项后面隐藏的布局 -->
+
+    <LinearLayout
+        android:id="@+id/swipe_item_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:background="#eee"
+        android:tag="back" >
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#eee"></Button>
+        <Button
+            android:id="@+id/swipe_item_action_1"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="#eee"
+            android:text="更新"></Button>
+        <Button
+            android:id="@+id/swipe_item_action_2"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:textColor="#fff"
+            android:background="#ff0000"
+            android:text="删除" />
+
+
+    </LinearLayout>
+
+ <!--前台布局-->
+  <include layout="@layout/city_selected_item"
+      android:id="@+id/swipe_item_front">
+  </include>
+</FrameLayout>
