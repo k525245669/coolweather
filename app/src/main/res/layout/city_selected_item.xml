@@ -8,15 +8,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
-        android:text="16:80"/>
+        android:textColor="#ffffff"
+        android:text="__:__"/>
     <TextView
         android:id="@+id/city_selected_city_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:layout_marginTop="10dp"
+        android:textColor="#ffffff"
         android:layout_below="@id/city_selected_show_time"
-        android:text="鄞州"/>
+        />
+    <ImageView
+        android:id="@+id/city_selected_image"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_toLeftOf="@+id/city_selected_tmp"
+        android:background="@drawable/day01"/>
     <TextView
         android:id="@+id/city_selected_tmp"
         android:layout_width="wrap_content"
@@ -25,5 +33,6 @@
         android:layout_marginRight="5dp"
         android:layout_alignParentRight="true"
         android:textSize="45sp"
-        android:text="20℃"/>
+        android:textColor="#ffffff"
+        android:text="__℃"/>
 </RelativeLayout>

@@ -150,6 +150,33 @@ public class Utility {
         weatherMap.put("08","中雨");
         weatherMap.put("09","大雨");
         weatherMap.put("10","暴雨");
+        weatherMap.put("11","大暴雨");
+        weatherMap.put("12","特暴雨");
+        weatherMap.put("13","降雪");
+        weatherMap.put("14","小雪");
+        weatherMap.put("15","中雪");
+        weatherMap.put("16","大雪");
+        weatherMap.put("17","暴雪");
+        weatherMap.put("18","雾");
+        weatherMap.put("19","冻雨");
+        weatherMap.put("20","沙城暴");
+        weatherMap.put("21","小到中雨");
+        weatherMap.put("22","中到大雨");
+        weatherMap.put("23","大到暴雨");
+        weatherMap.put("24","暴雨到大暴雨");
+        weatherMap.put("25","大暴雨到特大暴雨");
+        weatherMap.put("26","小到中雪");
+        weatherMap.put("27","中到大雪");
+        weatherMap.put("28","大到暴雪");
+        weatherMap.put("29","浮尘");
+        weatherMap.put("30","扬沙");
+        weatherMap.put("31","强沙尘暴");
+        weatherMap.put("53","霾");
+
+
+
+
+
         return weatherMap;
     }
     public static int getImageId(String type, int day) {
@@ -177,6 +204,63 @@ public class Utility {
                     return R.drawable.day09;
                 case "10":
                     return R.drawable.day10;
+                case "11":
+                    return R.drawable.day11 ;
+                case "12":
+                    return R.drawable.day12;
+                case "13":
+                    return R.drawable.day13;
+                case "14":
+                    return R.drawable.day14;
+                case "15":
+                    return R.drawable.day15;
+                case "16":
+                    return R.drawable.day16;
+                case "17":
+                    return R.drawable.day17;
+                case "18":
+                    return R.drawable.day18;
+                case "19":
+                    return R.drawable.day19;
+                case "20":
+                    return R.drawable.day20;
+                case "21":
+                    return R.drawable.day21;
+                case "22":
+                    return R.drawable.day22;
+                case "23":
+                    return R.drawable.day23;
+                case "24":
+                    return R.drawable.day24;
+                case "25":
+                    return R.drawable.day25;
+                case "26":
+                    return R.drawable.day26;
+                case "27":
+                    return R.drawable.day27;
+                case "28":
+                    return R.drawable.day28;
+                case "29":
+                    return R.drawable.day29;
+                case "30":
+                    return R.drawable.day30;
+                case "31":
+                    return R.drawable.day31;
+                case "53":
+                    return R.drawable.day53;
+
+
+
+
+
+
+
+
+
+
+
+
+
             }
 
         }
@@ -202,6 +286,52 @@ public class Utility {
                     return R.drawable.night08;
                 case "09":
                     return R.drawable.night09;
+                case "10":
+                    return R.drawable.night10;
+                case "11":
+                    return R.drawable.night11 ;
+                case "12":
+                    return R.drawable.night12;
+                case "13":
+                    return R.drawable.night13;
+                case "14":
+                    return R.drawable.night14;
+                case "15":
+                    return R.drawable.night15;
+                case "16":
+                    return R.drawable.night16;
+                case "17":
+                    return R.drawable.night17;
+                case "18":
+                    return R.drawable.night18;
+                case "19":
+                    return R.drawable.night19;
+                case "20":
+                    return R.drawable.night20;
+                case "21":
+                    return R.drawable.night21;
+                case "22":
+                    return R.drawable.night22;
+                case "23":
+                    return R.drawable.night23;
+                case "24":
+                    return R.drawable.night24;
+                case "25":
+                    return R.drawable.night25;
+                case "26":
+                    return R.drawable.night26;
+                case "27":
+                    return R.drawable.night27;
+                case "28":
+                    return R.drawable.night28;
+                case "29":
+                    return R.drawable.night29;
+                case "30":
+                    return R.drawable.night30;
+                case "31":
+                    return R.drawable.night31;
+                case "53":
+                    return R.drawable.night53;
             }
         }
         return 0;

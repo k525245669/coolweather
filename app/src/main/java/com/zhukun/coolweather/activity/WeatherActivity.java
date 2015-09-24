@@ -244,6 +244,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 
     private void queryWeatherFromServer(final String areaId, final int dayId) {
         String address = getAddress(areaId);
+        Log.d("address", address);
         HttpUtil.sendHttpRequest(address, new HttpCallBackListener() {
             @Override
             public void onFinish(String response) {
@@ -281,12 +282,16 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
             midTempText.setText("温度:");
             weatherType.setText(Utility.matchWeather(type2));
             weatherImage.setImageResource(Utility.getImageId(type2, NIGHT));
+            countyForSaved.setImageId(Utility.getImageId(type2, NIGHT));
+            Log.d("countyForSava", "------------Night:"+ countyForSaved.getImageId()+"");
         }
         else {
             tmp1Text.setText(tmp1 + "℃");
             midTempText.setText("~");
             weatherType.setText(Utility.matchWeather(type1));
             weatherImage.setImageResource(Utility.getImageId(type1, DAY));
+            countyForSaved.setImageId(Utility.getImageId(type1, DAY));
+            Log.d("countyForSava", "------------" + countyForSaved.getImageId() + "");
         }
         tmp2Text.setText(tmp2 + "℃");
         String publishTime = getHourAndMinute(pref.getString("publishTime", ""));
@@ -314,6 +319,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
                 CountyWeather countyForUpdate = new CountyWeather();
                 countyForUpdate.setTmp(countyForSaved.getTmp());
                 countyForUpdate.setDate(countyForSaved.getDate());
+                countyForUpdate.setImageId(countyForSaved.getImageId());
                 countyForUpdate.update(id);
             }
         }

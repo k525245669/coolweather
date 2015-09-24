@@ -1,11 +1,13 @@
 package com.zhukun.coolweather.util;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.fortysevendeg.swipelistview.SwipeListView;
@@ -36,9 +38,12 @@ public class SwipeAdapter extends ArrayAdapter<CountyWeather> {
         TextView cityText = (TextView) view.findViewById(R.id.city_selected_city_name);
         TextView tmpText = (TextView) view.findViewById(R.id.city_selected_tmp);
         Button deleteButton = (Button) view.findViewById(R.id.swipe_item_action_2);
+        ImageView imageView = (ImageView) view.findViewById(R.id.city_selected_image);
         dateText.setText(county.getDate());
         cityText.setText(county.getCountyName());
         tmpText.setText(county.getTmp());
+        imageView.setBackgroundResource(county.getImageId());
+        Log.d("Adapter", county.getImageId() + "");
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
