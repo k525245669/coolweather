@@ -11,12 +11,12 @@ import java.io.InputStream;
  * Created by Administrator on 2015/9/15.
  */
 public class RestoreData {
-    private String rootDirectory = "/data/data/com.zhukun.coolweather/databases/";
-    private final String DATABASE_PATH = "/data/data/com.zhukun.coolweather/databases/";
-    private final String DATABASE_FILENAME = "cool_weather";
-    private final String DATABASE_FILE2NAME = "cool_weather-journal";
+    private static String rootDirectory = "/data/data/com.zhukun.coolweather/databases/";
+    private static final String DATABASE_PATH = "/data/data/com.zhukun.coolweather/databases/";
+    private static final String DATABASE_FILENAME = "cool_weather";
+    private static final String DATABASE_FILE2NAME = "cool_weather-journal";
 
-    public void createDatabase(Context context) throws IOException {
+    public  static void createDatabase(Context context) throws IOException {
         try
         {
             // 获得.db文件的绝对路径
@@ -33,7 +33,7 @@ public class RestoreData {
         }
     }
 
-    private void CopyFile(String dbFile, String assetFile, Context context) throws IOException {
+    private static void CopyFile(String dbFile, String assetFile, Context context) throws IOException {
         if (!(new File(dbFile)).exists()){
             // 获得封装.db文件的InputStream对象
             InputStream is = context.getAssets().open(assetFile);

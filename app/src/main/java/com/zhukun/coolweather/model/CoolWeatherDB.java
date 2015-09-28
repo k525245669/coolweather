@@ -61,6 +61,45 @@ public class CoolWeatherDB {
         }
         return list;
     }
+    /*查询包含name的省份*/
+    public Province searchProvince(String name){
+        String Sql = "select * from Province where province_name like '%" + name +"%'";
+        Cursor cursor = db.rawQuery(Sql, null);
+        if(cursor.moveToFirst()){
+            Province province = new Province();
+            province.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            province.setProvinceName(cursor.getString(cursor.getColumnIndex("province_name")));
+            return province;
+        }
+        return null;
+    }
+    /*查询包含name的City*/
+    public City searchCity(String name){
+        String Sql = "select * from City where city_name like '%" + name + "%'";
+        Cursor cursor = db.rawQuery(Sql, null);
+        if(cursor.moveToFirst()){
+            City city = new City();
+            city.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
+            city.setProvinceId(cursor.getInt(cursor.getColumnIndex("province_id")));
+            return city;
+        }
+        return null;
+    }
+    /*查询包含name的county*/
+    public County searchCounty(String name){
+        String Sql = "select * from County where county_name like '%" + name + "%'";
+        Cursor cursor = db.rawQuery(Sql, null);
+        if(cursor.moveToFirst()) {
+            County county = new County();
+            county.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            county.setCountyName(cursor.getString(cursor.getColumnIndex("county_name")));
+            county.setCountyCode(cursor.getString(cursor.getColumnIndex("county_code")));
+            county.setCityId(cursor.getInt(cursor.getColumnIndex("city_id")));
+            return county;
+        }
+        return null;
+    }
 
     /*将City实例存储到数据库*/
     public void saveCity(City city) {

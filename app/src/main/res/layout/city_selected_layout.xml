@@ -20,8 +20,8 @@
         swipe:swipeCloseAllItemsWhenMoveList="true"
         swipe:swipeFrontView="@+id/swipe_item_front"
         swipe:swipeMode="left"
-        swipe:swipeOffsetLeft="0dp"
-        swipe:swipeOffsetRight="0dp"
+        swipe:swipeOffsetLeft="50dp"
+        swipe:swipeOffsetRight="50dp"
         swipe:swipeOpenOnLongPress="false"/>
     <Button
         android:id="@+id/add_more_city"

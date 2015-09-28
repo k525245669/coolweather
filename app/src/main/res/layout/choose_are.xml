@@ -14,6 +14,57 @@
             android:textColor="#fff"
             android:textSize="24sp"/>
     </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#c2c2c2"
+        android:orientation="horizontal">
+        <!--用于让EditTextB不自动获得焦点-->
+        <LinearLayout
+            android:id="@+id/used_for_focus"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="0px"
+            android:layout_height="0px"
+            />
+        <EditText
+            android:id="@+id/search_city"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:padding="3dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="29dp"
+            android:hint="请输入查询省份"
+            android:singleLine="true"
+            android:gravity="center"
+            android:background="#ffffff">
+        </EditText>
+        <RelativeLayout
+            android:layout_width="30dp"
+            android:layout_height="29dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="0dp"
+            android:layout_gravity="center"
+            android:background="#fff">
+            <Button
+                android:id="@+id/search_return"
+                android:layout_width="22dp"
+                android:layout_height="20dp"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:background="#c2c2c2"
+                android:text="X"
+                android:textColor="#ffffff"/>
+
+        </RelativeLayout>
+
+</LinearLayout>
+
 
     <ListView
         android:id="@+id/list_view"

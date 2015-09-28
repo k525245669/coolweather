@@ -66,8 +66,8 @@ public class SelectedCityActivity extends Activity {
     }
     private void reload() {
         //滑动时向左偏移量，根据设备的大小来决定偏移量的大小
-        mSwipeListView.setOffsetLeft(deviceWidth * 3 / 5);
-        mSwipeListView.setOffsetRight(deviceWidth * 3 / 5);
+        mSwipeListView.setOffsetLeft(deviceWidth * 5/ 6);
+        mSwipeListView.setOffsetRight(deviceWidth * 5 / 6);
         //设置动画时间
         mSwipeListView.setAnimationTime(30);
         mSwipeListView.setSwipeOpenOnLongPress(false);

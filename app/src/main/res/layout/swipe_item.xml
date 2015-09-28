@@ -19,7 +19,7 @@
             android:background="#eee"></Button>
         <Button
             android:id="@+id/swipe_item_action_1"
-            android:layout_width="70dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:background="#eee"

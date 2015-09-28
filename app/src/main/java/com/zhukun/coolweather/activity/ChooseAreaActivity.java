@@ -2,14 +2,23 @@ package com.zhukun.coolweather.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.input.InputManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -50,6 +59,10 @@ public class ChooseAreaActivity extends Activity {
     private CoolWeatherDB db;
     private ProgressDialog progressDialog;
     private boolean isFromSelectedActivity;
+    private EditText searchText;
+    private Button rtnButton;
+    private LinearLayout lout;
+    private boolean fromResearch = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,30 +78,36 @@ public class ChooseAreaActivity extends Activity {
             return;
         }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        RestoreData restoreData = new RestoreData();
         try {
-            restoreData.createDatabase(ChooseAreaActivity.this);
-        } catch (IOException e) {
+            RestoreData.createDatabase(ChooseAreaActivity.this);
+        } catch (IOException e){
             e.printStackTrace();
         }
         setContentView(R.layout.choose_are);
-
-
         db = CoolWeatherDB.getInstance(this);
         titleText = (TextView) findViewById(R.id.title_text);
         listView = (ListView) findViewById(R.id.list_view);
+        searchText = (EditText) findViewById(R.id.search_city);
+        lout = (LinearLayout) findViewById(R.id.used_for_focus); //隐藏的控件，用于控制焦点
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dataList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if(fromResearch){
+                    lostFocus(searchText);
+                }
                 if (currentLevel == PROVINCE_LEVEL) {
                     selectedProvince = provinceList.get(i);
                     queryCities();
+                    searchText.setHint("请输入查询城市");
+                    //lostFocus(searchText);
                 } else if (currentLevel == CITY_LEVEL) {
                     selectedCity = cityList.get(i);
                     queryCounties();
-                } else if (currentLevel == COUNTY_LEVEL){
+                    searchText.setHint("请输入查询区县");
+                    //lostFocus(searchText);
+                } else if (currentLevel == COUNTY_LEVEL) {
                     //跳转到具体的天气页面；
                     String countyName = countyList.get(i).getCountyName();
                     String areId = countyList.get(i).getCountyCode();
@@ -104,6 +123,89 @@ public class ChooseAreaActivity extends Activity {
             }
         });
         queryProvince();
+
+        searchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String contains = searchText.getText().toString();
+                boolean haveFind = false;
+                if (count!=0 ) {
+                    Province pro = db.searchProvince(contains);
+                    if (pro != null) {
+                        provinceList.clear();
+                        provinceList.add(pro);
+                        refreshList(pro.getProvinceName(), PROVINCE_LEVEL);
+                        searchText.setHint("请输入查询城市");
+                        fromResearch =true;
+                    } else {
+                        City city = db.searchCity(contains);
+                        if (city != null) {
+                            if(cityList == null){
+                                cityList = new ArrayList<City>();
+                            }
+                            cityList.clear();
+                            cityList.add(city);
+                            refreshList(city.getCityName(), CITY_LEVEL);
+                            searchText.setHint("请输入查询区县");
+                            fromResearch =true;
+                        } else {
+                            County county = db.searchCounty(contains);
+                            if (county != null) {
+                                if(countyList == null){
+                                    countyList = new ArrayList<County>();
+                                }
+                                countyList.clear();
+                                countyList.add(county);
+                                refreshList(county.getCountyName(), COUNTY_LEVEL);
+                            } else {
+                                refreshList("无法查询：" + contains, 0);
+                            }
+                        }
+
+                    }
+                }
+
+            }
+
+
+        });
+        rtnButton = (Button) findViewById(R.id.search_return);
+        rtnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchText.setText("");
+                queryProvince();
+                lout.requestFocus(); //让隐藏的控件获取焦点，让Edit失去焦点
+                InputMethodManager imm =(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS); //隐藏软键盘
+
+            }
+        });
+
+    }
+
+    private void lostFocus(EditText searchText) {
+        searchText.setText("");
+        lout.requestFocus(); //让隐藏的控件获取焦点，让Edit失去焦点
+        InputMethodManager imm =(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS); //隐藏软键盘
+    }
+
+    private void refreshList(String cityName, int level) {
+        dataList.clear();
+        dataList.add(cityName);
+        adapter.notifyDataSetChanged();
+        listView.setSelection(0);
+        titleText.setText("模糊搜索");
+        currentLevel = level;
     }
 
     private void queryProvince() {
