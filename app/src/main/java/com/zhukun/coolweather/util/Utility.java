@@ -18,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -109,7 +110,7 @@ public class Utility {
             JSONObject basicInfo =  jsonObject.getJSONObject("f");
             String publishTime = basicInfo.getString("f0");
             JSONArray weatherArray = basicInfo.getJSONArray("f1");
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy年M月d日",Locale.CHINA);
+            SimpleDateFormat sdf = new SimpleDateFormat("M月d日",Locale.CHINA);
 
             for(int i=0; i<weatherArray.length(); i++){
                 JSONObject weatherObject = weatherArray.getJSONObject(i);
@@ -117,6 +118,7 @@ public class Utility {
                 String type2 = weatherObject.getString("fb");
                 String tmp1 = weatherObject.getString("fc");
                 String tmp2 = weatherObject.getString("fd");
+                String weekTime = getWeekTime(i);
                 SharedPreferences.Editor editor = context.getSharedPreferences("data" + i, 0).edit();
                 editor.putBoolean("city_selected", true);
                 editor.putString("type1", type1);
@@ -124,6 +126,7 @@ public class Utility {
                 editor.putString("tmp1", tmp1);
                 editor.putString("tmp2", tmp2);
                 editor.putString("publishTime", publishTime);
+                editor.putString("weekTime", weekTime);
                 editor.putString("currentTime", sdf.format(new Date().getTime()+i*24*60*60*1000));
                 editor.commit();
             }
@@ -131,6 +134,33 @@ public class Utility {
             e.printStackTrace();
         }
     }
+
+    private static String getWeekTime(int i) {
+
+        Calendar cal=Calendar.getInstance();
+        int dayId = (cal.get(Calendar.DAY_OF_WEEK) + i) % 7;
+        switch (dayId){
+            case 1:
+                return "周日";
+            case 2:
+                return "周一";
+            case 3:
+                return "周二";
+            case 4:
+                return "周三";
+            case 5:
+                return "周四";
+            case 6:
+                return "周五";
+            case 7:
+                return "周六";
+            default:
+                return "";
+        }
+    }
+
+
+
 
     public static String matchWeather(String weatherId){
         HashMap weatherMap = weatherMapInit();

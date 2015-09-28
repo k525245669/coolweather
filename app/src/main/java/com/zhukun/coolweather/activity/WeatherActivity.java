@@ -276,7 +276,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         String tmp1 = pref.getString("tmp1", "0");
         String tmp2 = pref.getString("tmp2", "0");
         String type1 = pref.getString("type1","");
-        String type2 = pref.getString("type2","");
+        String type2 = pref.getString("type2", "");
         if(tmp1.equals("")){
             tmp1Text.setText("夜间");
             midTempText.setText("温度:");
@@ -296,7 +296,15 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         tmp2Text.setText(tmp2 + "℃");
         String publishTime = getHourAndMinute(pref.getString("publishTime", ""));
         publishText.setText("今天" + publishTime + "发布");
-        currentText.setText(pref.getString("currentTime","")+ ":");
+        String currentTime = pref.getString("currentTime","");
+        String weekTime = pref.getString("weekTime","");
+        if(dayId == TODAY) {
+            currentText.setText("今日 " + weekTime + ":");
+        } else if(dayId == TOMORROW){
+            currentText.setText("明日 " + weekTime + ":");
+        } else {
+            currentText.setText(currentTime + " " + weekTime + ":");
+        }
         infoLayout.setVisibility(View.VISIBLE);
         CityText.setVisibility(View.VISIBLE);
         if(dayId == TODAY){
@@ -326,6 +334,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
         Intent intent = new Intent(this, AutoUpdateService.class);
         startService(intent);
     }
+
 
     private String getHourAndMinute(String publishTime) {
         String tmp1 = publishTime.substring(8,10);
